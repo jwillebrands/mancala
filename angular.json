@@ -1,0 +1,114 @@
+{
+    "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+    "version": 1,
+    "cli": {
+        "packageManager": "yarn"
+    },
+    "newProjectRoot": "src/main/typescript",
+    "projects": {
+        "mancala-ui": {
+            "projectType": "application",
+            "schematics": {
+                "@schematics/angular:component": {
+                    "style": "scss"
+                },
+                "@schematics/angular:application": {
+                    "strict": true
+                }
+            },
+            "root": "src/main/typescript/mancala-ui",
+            "sourceRoot": "src/main/typescript/mancala-ui/src",
+            "prefix": "app",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-angular:browser",
+                    "options": {
+                        "outputPath": "dist/mancala-ui",
+                        "index": "src/main/typescript/mancala-ui/src/index.html",
+                        "main": "src/main/typescript/mancala-ui/src/main.ts",
+                        "polyfills": "src/main/typescript/mancala-ui/src/polyfills.ts",
+                        "tsConfig": "src/main/typescript/mancala-ui/tsconfig.app.json",
+                        "inlineStyleLanguage": "scss",
+                        "assets": [
+                            "src/main/typescript/mancala-ui/src/favicon.ico",
+                            "src/main/typescript/mancala-ui/src/assets"
+                        ],
+                        "styles": [
+                            "src/main/typescript/mancala-ui/src/styles.scss"
+                        ],
+                        "scripts": []
+                    },
+                    "configurations": {
+                        "production": {
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "500kb",
+                                    "maximumError": "1mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "2kb",
+                                    "maximumError": "4kb"
+                                }
+                            ],
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/main/typescript/mancala-ui/src/environments/environment.ts",
+                                    "with": "src/main/typescript/mancala-ui/src/environments/environment.prod.ts"
+                                }
+                            ],
+                            "outputHashing": "all"
+                        },
+                        "development": {
+                            "buildOptimizer": false,
+                            "optimization": false,
+                            "vendorChunk": true,
+                            "extractLicenses": false,
+                            "sourceMap": true,
+                            "namedChunks": true
+                        }
+                    },
+                    "defaultConfiguration": "production"
+                },
+                "serve": {
+                    "builder": "@angular-devkit/build-angular:dev-server",
+                    "configurations": {
+                        "production": {
+                            "browserTarget": "mancala-ui:build:production"
+                        },
+                        "development": {
+                            "browserTarget": "mancala-ui:build:development"
+                        }
+                    },
+                    "defaultConfiguration": "development"
+                },
+                "extract-i18n": {
+                    "builder": "@angular-devkit/build-angular:extract-i18n",
+                    "options": {
+                        "browserTarget": "mancala-ui:build"
+                    }
+                },
+                "test": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "main": "src/main/typescript/mancala-ui/src/test.ts",
+                        "polyfills": "src/main/typescript/mancala-ui/src/polyfills.ts",
+                        "tsConfig": "src/main/typescript/mancala-ui/tsconfig.spec.json",
+                        "karmaConfig": "src/main/typescript/mancala-ui/karma.conf.js",
+                        "inlineStyleLanguage": "scss",
+                        "assets": [
+                            "src/main/typescript/mancala-ui/src/favicon.ico",
+                            "src/main/typescript/mancala-ui/src/assets"
+                        ],
+                        "styles": [
+                            "src/main/typescript/mancala-ui/src/styles.scss"
+                        ],
+                        "scripts": []
+                    }
+                }
+            }
+        }
+    },
+    "defaultProject": "mancala-ui"
+}

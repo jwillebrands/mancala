@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
+. "$(dirname "$0")/_/husky.sh"
 
 ./mvnw -q spotless:check
+yarn git-format-staged -f 'prettier --ignore-unknown --stdin-filepath "{}"' \*
