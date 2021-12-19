@@ -6,6 +6,7 @@ export interface CellState {
 }
 
 export interface GameState {
+    readonly id: string;
     readonly numPlayers: number;
     readonly housesPerPlayer: number;
     readonly activePlayer: number;

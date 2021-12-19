@@ -27,9 +27,7 @@ export class AppComponent {
         this.gameState$
             .pipe(
                 take(1),
-                switchMap((state) =>
-                    this.gameService.play(state.activePlayer, house)
-                )
+                switchMap((state) => this.gameService.play(state.id, house))
             )
             .subscribe((state) => this.gameState$.next(state));
     }

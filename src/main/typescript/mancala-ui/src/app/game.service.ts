@@ -14,8 +14,5 @@ export abstract class GameService {
 
     abstract queryState(id: string): Observable<GameState>;
 
-    abstract play(
-        activePlayer: number,
-        house: HouseIdentifier
-    ): Observable<GameState>;
+    abstract play(gameId: string, house: HouseIdentifier): Observable<GameState>;
 }

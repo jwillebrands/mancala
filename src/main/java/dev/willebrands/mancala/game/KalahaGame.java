@@ -12,7 +12,7 @@ public class KalahaGame {
         state = new MutableGameState(NUM_PLAYERS, houseCount, houseId -> seedCount);
     }
 
-    GameState currentState() {
+    public GameState currentState() {
         return state;
     }
 
