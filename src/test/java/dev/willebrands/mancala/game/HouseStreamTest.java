@@ -1,26 +1,28 @@
 package dev.willebrands.mancala.game;
 
+import static dev.willebrands.mancala.game.HouseStream.houseStream;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
+import dev.willebrands.mancala.game.HouseStream.HouseStreamBuilder;
 import org.junit.jupiter.api.Test;
 
-class HouseIdentifierStreamTest {
+class HouseStreamTest {
 
     @Test
     void counterClockwiseStartIsExclusive() {
-        HouseIdentifierStream houseIdentifierStream = new HouseIdentifierStream(2, 6, false);
+        HouseStreamBuilder houseStream = houseStream(2, 6).includeStores(false);
         HouseIdentifier start = new HouseIdentifier(0, 1);
         HouseIdentifier firstStreamElement =
-                houseIdentifierStream.counterClockwiseAfter(start).findFirst().orElseThrow();
+                houseStream.counterClockwise().startAfter(start).stream().findFirst().orElseThrow();
         assertEquals(new HouseIdentifier(0, 2), firstStreamElement);
     }
 
     @Test
     void counterClockwiseLoopsThroughAllInOrder() {
-        HouseIdentifierStream houseIdentifierStream = new HouseIdentifierStream(2, 2, false);
+        HouseStreamBuilder houseStreamBuilder = houseStream(2, 2).includeStores(false);
         HouseIdentifier start = new HouseIdentifier(0, 0);
         assertIterableEquals(
                 asList(
@@ -28,12 +30,14 @@ class HouseIdentifierStreamTest {
                         new HouseIdentifier(1, 0),
                         new HouseIdentifier(1, 1),
                         new HouseIdentifier(0, 0)),
-                houseIdentifierStream.counterClockwiseAfter(start).limit(4).collect(toList()));
+                houseStreamBuilder.counterClockwise().startAfter(start).stream()
+                        .limit(4)
+                        .collect(toList()));
     }
 
     @Test
     void storesCanBeIncluded() {
-        HouseIdentifierStream houseIdentifierStream = new HouseIdentifierStream(2, 2, true);
+        HouseStreamBuilder houseStream = houseStream(2, 2).includeStores(true);
         HouseIdentifier start = new HouseIdentifier(0, 0);
         assertIterableEquals(
                 asList(
@@ -41,15 +45,19 @@ class HouseIdentifierStreamTest {
                         new HouseIdentifier(0, 2),
                         new HouseIdentifier(1, 0),
                         new HouseIdentifier(1, 1)),
-                houseIdentifierStream.counterClockwiseAfter(start).limit(4).collect(toList()));
+                houseStream.counterClockwise().startAfter(start).stream()
+                        .limit(4)
+                        .collect(toList()));
     }
 
     @Test
     void houseAfterPlayersLastIsStore() {
-        HouseIdentifierStream houseIdentifierStream = new HouseIdentifierStream(2, 2, true);
+        HouseStreamBuilder houseStream = houseStream(2, 2).includeStores(true);
         HouseIdentifier start = new HouseIdentifier(0, 1);
         assertEquals(
                 new HouseIdentifier(0, 2),
-                houseIdentifierStream.counterClockwiseAfter(start).findFirst().orElseThrow());
+                houseStream.counterClockwise().startAfter(start).stream()
+                        .findFirst()
+                        .orElseThrow());
     }
 }

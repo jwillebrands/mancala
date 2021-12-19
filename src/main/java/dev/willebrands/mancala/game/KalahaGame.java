@@ -33,8 +33,7 @@ public class KalahaGame {
         if (state.getSeedCount(houseIdentifier) == 0) {
             return MoveResult.illegalMove("Cannot sow from an empty house.");
         }
-        new HouseIdentifierStream(state.numPlayers(), state.playerHouseCount(), true)
-                .counterClockwiseAfter(houseIdentifier)
+        state.houses().includeStores(true).counterClockwise().startAfter(houseIdentifier).stream()
                 .filter(isNotOpponentsStore(executingPlayer))
                 .limit(state.removeSeedsFromHouse(houseIdentifier))
                 .forEach(house -> state.sowSeedsInHouse(house, 1));

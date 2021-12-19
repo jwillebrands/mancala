@@ -1,5 +1,7 @@
 package dev.willebrands.mancala.game;
 
+import dev.willebrands.mancala.game.HouseStream.HouseStreamBuilder;
+
 public interface GameState {
     int numPlayers();
 
@@ -10,6 +12,8 @@ public interface GameState {
     int getScore(int playerId);
 
     int getSeedCount(HouseIdentifier houseIdentifier);
+
+    HouseStreamBuilder houses();
 
     default boolean isActivePlayer(int player) {
         return getActivePlayer() == player;

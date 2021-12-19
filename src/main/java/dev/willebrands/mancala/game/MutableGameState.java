@@ -1,5 +1,6 @@
 package dev.willebrands.mancala.game;
 
+import static dev.willebrands.mancala.game.HouseStream.houseStream;
 import static java.util.Objects.requireNonNull;
 
 import java.util.HashMap;
@@ -53,6 +54,11 @@ public class MutableGameState implements GameState {
     public int getSeedCount(HouseIdentifier houseIdentifier) {
         checkValidHouse(houseIdentifier, false);
         return seedCount.get(houseIdentifier);
+    }
+
+    @Override
+    public HouseStream.HouseStreamBuilder houses() {
+        return houseStream(numPlayers, numHousesPerPlayer);
     }
 
     /**
