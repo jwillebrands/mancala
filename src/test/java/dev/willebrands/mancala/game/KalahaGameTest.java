@@ -53,7 +53,7 @@ class KalahaGameTest {
     @Test
     @DisplayName("Sow 6 seeds from A1 in a 2 player, 2 house layout. Expect score 2-0")
     public void ownStoreIsIncludedForEachLapWhenSowing() {
-        game = new KalahaGame(2, 7);
+        game = new KalahaGame(2, 6);
         int playerOne = activePlayer();
         ensureLegalMoves(game -> game.sow(playerOne, new HouseIdentifier(playerOne, 1)));
         assertEquals(2, game.currentState().getScore(playerOne));
@@ -61,7 +61,7 @@ class KalahaGameTest {
         assertEquals(7, game.currentState().getSeedCount(new HouseIdentifier(0, 0)));
         assertEquals(7, game.currentState().getSeedCount(new HouseIdentifier(1, 0)));
         assertEquals(7, game.currentState().getSeedCount(new HouseIdentifier(1, 1)));
-        assertEquals(2, game.currentState().getSeedCount(new HouseIdentifier(0, 1)));
+        assertEquals(1, game.currentState().getSeedCount(new HouseIdentifier(0, 1)));
     }
 
     @Test
