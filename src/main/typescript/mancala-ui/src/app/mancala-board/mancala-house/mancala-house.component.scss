@@ -1,0 +1,18 @@
+:host {
+    display: flex;
+    flex: 0 0 auto;
+    justify-content: center;
+    align-items: center;
+    background: lightyellow;
+    border-radius: 50%;
+    width: 5rem;
+    height: 5rem;
+
+    &.belongsToCurrentPlayer {
+        cursor: pointer;
+
+        &:hover {
+            outline: 1px solid rebeccapurple;
+        }
+    }
+}

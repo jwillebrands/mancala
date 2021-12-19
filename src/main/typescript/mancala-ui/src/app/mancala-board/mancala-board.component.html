@@ -1,0 +1,22 @@
+<app-mancala-store
+    [ngStyle]="{ gridColumn: 1, gridRow: 1 }"
+></app-mancala-store>
+<ng-container
+    *ngFor="let row of gameState.houseLayout; index as rowId; count as count"
+>
+    <app-mancala-house
+        *ngFor="let house of row; index as houseId"
+        [ngStyle]="{ gridRow: rowId, gridColumn: 2 + houseId }"
+        [seedCount]="house.seeds"
+        [belongsToCurrentPlayer]="
+            belongsToActivePlayer(house.identifier.playerId)
+        "
+        (click)="onHouseClicked(house.identifier)"
+    ></app-mancala-house>
+</ng-container>
+<app-mancala-store
+    [ngStyle]="{ gridColumn: gameState.houseLayout[0].length + 2, gridRow: 2 }"
+></app-mancala-store>
+<app-turn-indicator
+    [currentPlayer]="gameState.activePlayer"
+></app-turn-indicator>

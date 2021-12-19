@@ -13,14 +13,17 @@
         "watch": "ng build --watch --configuration development",
         "test": "ng test",
         "format": "prettier -w --loglevel warn . && ./mvnw -q spotless:apply",
+        "verify": "prettier --check . && ./mvnw -q spotless:check",
         "prepare": "husky install .githooks"
     },
     "dependencies": {
         "@angular/animations": "~13.1.0",
+        "@angular/cdk": "13.1.1",
         "@angular/common": "~13.1.0",
         "@angular/compiler": "~13.1.0",
         "@angular/core": "~13.1.0",
         "@angular/forms": "~13.1.0",
+        "@angular/material": "13.1.1",
         "@angular/platform-browser": "~13.1.0",
         "@angular/platform-browser-dynamic": "~13.1.0",
         "@angular/router": "~13.1.0",
