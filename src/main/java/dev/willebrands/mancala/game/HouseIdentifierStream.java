@@ -7,14 +7,21 @@ public class HouseIdentifierStream {
     private final int playerCount;
     private final int housesPerPlayer;
 
-    HouseIdentifierStream(int playerCount, int housesPerPlayer) {
+    HouseIdentifierStream(int playerCount, int housesPerPlayer, boolean includeStores) {
         this.playerCount = playerCount;
+        if (includeStores) {
+            housesPerPlayer++;
+        }
         this.housesPerPlayer = housesPerPlayer;
     }
 
+    private int maxIndex() {
+        return playerCount * housesPerPlayer;
+    }
+
     private HouseIdentifier absoluteHouseIndexToIdentifier(int index) {
-        if (index >= playerCount * housesPerPlayer) {
-            throw new IndexOutOfBoundsException("Expected index in range of 0 to " + index);
+        if (index >= maxIndex()) {
+            throw new IndexOutOfBoundsException("Expected index in range of 0 to " + maxIndex());
         }
         int playerId = index / housesPerPlayer % playerCount;
         int houseId = index % housesPerPlayer;
@@ -32,7 +39,7 @@ public class HouseIdentifierStream {
                         startExclusive.getPlayer() * housesPerPlayer
                                 + startExclusive.getIndex()
                                 + 1,
-                        i -> (i + 1) % (playerCount * housesPerPlayer))
+                        i -> (i + 1) % maxIndex())
                 .mapToObj(this::absoluteHouseIndexToIdentifier);
     }
 }
