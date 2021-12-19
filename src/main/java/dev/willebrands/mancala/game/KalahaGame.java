@@ -1,5 +1,7 @@
 package dev.willebrands.mancala.game;
 
+import java.util.function.Predicate;
+
 public class KalahaGame {
     static final int DEFAULT_HOUSE_COUNT = 6;
     static final int DEFAULT_SEED_COUNT = 4;
@@ -14,6 +16,12 @@ public class KalahaGame {
         return state;
     }
 
+    private Predicate<HouseIdentifier> isNotOpponentsStore(int executingPlayer) {
+        return houseIdentifier ->
+                houseIdentifier.getPlayer() == executingPlayer
+                        || houseIdentifier.getIndex() != state.playerHouseCount();
+    }
+
     public MoveResult sow(int executingPlayer, HouseIdentifier houseIdentifier) {
         if (!state.isActivePlayer(executingPlayer)) {
             return MoveResult.illegalMove(
@@ -25,8 +33,9 @@ public class KalahaGame {
         if (state.getSeedCount(houseIdentifier) == 0) {
             return MoveResult.illegalMove("Cannot sow from an empty house.");
         }
-        new HouseIdentifierStream(state.numPlayers(), state.playerHouseCount(), false)
+        new HouseIdentifierStream(state.numPlayers(), state.playerHouseCount(), true)
                 .counterClockwiseAfter(houseIdentifier)
+                .filter(isNotOpponentsStore(executingPlayer))
                 .limit(state.removeSeedsFromHouse(houseIdentifier))
                 .forEach(house -> state.sowSeedsInHouse(house, 1));
         return MoveResult.legalMove();
