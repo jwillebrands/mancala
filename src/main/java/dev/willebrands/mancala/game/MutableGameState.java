@@ -11,7 +11,6 @@ public class MutableGameState implements GameState {
     private final int numHousesPerPlayer;
 
     private final Map<HouseIdentifier, Integer> seedCount = new HashMap<>();
-    private final int[] scoreByPlayerId;
     private int activePlayer = 0;
 
     public MutableGameState(
@@ -20,12 +19,12 @@ public class MutableGameState implements GameState {
             Function<HouseIdentifier, Integer> initialValueProvider) {
         this.numPlayers = numPlayers;
         this.numHousesPerPlayer = numHousesPerPlayer;
-        scoreByPlayerId = new int[numPlayers];
-        for (int houseId = 0; houseId < numHousesPerPlayer; houseId++) {
-            for (int playerId = 0; playerId < numPlayers; playerId++) {
+        for (int playerId = 0; playerId < numPlayers; playerId++) {
+            for (int houseId = 0; houseId < numHousesPerPlayer; houseId++) {
                 HouseIdentifier houseIdentifier = new HouseIdentifier(playerId, houseId);
                 seedCount.put(houseIdentifier, initialValueProvider.apply(houseIdentifier));
             }
+            seedCount.put(new HouseIdentifier(playerId, numHousesPerPlayer), 0);
         }
     }
 
@@ -47,12 +46,12 @@ public class MutableGameState implements GameState {
     @Override
     public int getScore(int playerId) {
         checkValidPlayerId(playerId);
-        return scoreByPlayerId[playerId];
+        return seedCount.get(new HouseIdentifier(playerId, numHousesPerPlayer));
     }
 
     @Override
     public int getSeedCount(HouseIdentifier houseIdentifier) {
-        checkValidHouse(houseIdentifier);
+        checkValidHouse(houseIdentifier, false);
         return seedCount.get(houseIdentifier);
     }
 
@@ -63,7 +62,7 @@ public class MutableGameState implements GameState {
      * @return The amount the seeds that were contained in the house
      */
     Integer removeSeedsFromHouse(HouseIdentifier houseIdentifier) {
-        checkValidHouse(houseIdentifier);
+        checkValidHouse(houseIdentifier, false);
         return seedCount.put(houseIdentifier, 0);
     }
 
@@ -75,7 +74,7 @@ public class MutableGameState implements GameState {
      * @return Amount of seeds in the house as a result of the sowing action
      */
     Integer sowSeedsInHouse(HouseIdentifier houseIdentifier, int numSeeds) {
-        checkValidHouse(houseIdentifier);
+        checkValidHouse(houseIdentifier, true);
         return seedCount.merge(houseIdentifier, numSeeds, Integer::sum);
     }
 
@@ -87,7 +86,7 @@ public class MutableGameState implements GameState {
      * @param capturingPlayer
      */
     void capture(HouseIdentifier houseIdentifier, int capturingPlayer) {
-        checkValidHouse(houseIdentifier);
+        checkValidHouse(houseIdentifier, false);
         checkValidPlayerId(capturingPlayer);
         score(capturingPlayer, removeSeedsFromHouse(houseIdentifier));
     }
@@ -100,7 +99,7 @@ public class MutableGameState implements GameState {
      */
     void score(int player, int seeds) {
         checkValidPlayerId(player);
-        scoreByPlayerId[player] += seeds;
+        sowSeedsInHouse(new HouseIdentifier(player, numHousesPerPlayer), seeds);
     }
 
     void changeActivePlayer(int nextPlayer) {
@@ -108,9 +107,12 @@ public class MutableGameState implements GameState {
         activePlayer = nextPlayer;
     }
 
-    private void checkValidHouse(HouseIdentifier houseIdentifier) {
+    private void checkValidHouse(HouseIdentifier houseIdentifier, boolean allowStore) {
         if (!seedCount.containsKey(requireNonNull(houseIdentifier))) {
             throw new IllegalArgumentException("No such house: " + houseIdentifier);
+        }
+        if (!allowStore && houseIdentifier.getIndex() == numHousesPerPlayer) {
+            throw new IllegalArgumentException("Stores are not allowed for this action.");
         }
     }
 
