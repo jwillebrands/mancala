@@ -29,7 +29,9 @@ public class HouseIdentifierStream {
      */
     Stream<HouseIdentifier> counterClockwiseAfter(HouseIdentifier startExclusive) {
         return IntStream.iterate(
-                        startExclusive.getPlayer() * housesPerPlayer + startExclusive.getIndex(),
+                        startExclusive.getPlayer() * housesPerPlayer
+                                + startExclusive.getIndex()
+                                + 1,
                         i -> (i + 1) % (playerCount * housesPerPlayer))
                 .mapToObj(this::absoluteHouseIndexToIdentifier);
     }
