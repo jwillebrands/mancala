@@ -118,6 +118,27 @@ class KalahaGameTest {
     }
 
     @Test
+    public void testPlayerTwoOppositeCapture() {
+        ensureLegalMoves(
+                // Play A2 (4 seeds)
+                move(0, house("A2")),
+                // Opponent plays B5 (4 seeds); scores 1
+                move(1, house("B5")),
+                move(0, house("A1")),
+                // Opponent plays B1, landing on empty B5; capturing it (1) and A2 (2); scores 3
+                move(1, house("B1")));
+        assertEquals(
+                0,
+                game.currentState().getSeedCount(house("B5")),
+                "Sowing last seed in empty cup should capture it.");
+        assertEquals(
+                0,
+                game.currentState().getSeedCount(house("A2")),
+                "Sowing last seed in empty cup should capture opposite");
+        assertEquals(4, game.currentState().getScore(1));
+    }
+
+    @Test
     public void testEndGameScoring() {
         game = new KalahaGame(2, 2);
         ensureLegalMoves(
