@@ -103,7 +103,7 @@ public class KalahaGame {
     private HouseIdentifier oppositeHouse(HouseIdentifier house) {
         return new HouseIdentifier(
                 house.getPlayer() + 1 % state.numPlayers(),
-                state.playerHouseCount() - house.getIndex());
+                state.playerHouseCount() - house.getIndex() - 1);
     }
 
     public List<List<HouseIdentifier>> boardLayout() {

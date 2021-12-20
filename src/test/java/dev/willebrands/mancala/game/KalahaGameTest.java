@@ -87,12 +87,12 @@ class KalahaGameTest {
                 "Sowing last seed in empty cup should capture it.");
         assertEquals(
                 0,
-                game.currentState().getSeedCount(house("B1")),
+                game.currentState().getSeedCount(house("B2")),
                 "Sowing last seed in empty cup should capture opposite");
         assertEquals(
-                7,
+                8,
                 game.currentState().getScore(0),
-                "Expect 1 point from first turn, 5 from capturing B2 and 1 from capturing A5");
+                "Expect 1 point from first turn, 6 from capturing B2 and 1 from capturing A5");
     }
 
     @Test
