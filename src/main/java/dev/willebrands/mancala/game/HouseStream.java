@@ -40,7 +40,7 @@ public class HouseStream {
         private int direction = 1;
         private boolean includeStores = false;
         private int offset = 0;
-        private HouseIdentifier start;
+        private HouseIdentifier start = new HouseIdentifier(0, 0);
 
         HouseStreamBuilder(int playerCount, int housesPerPlayer) {
             this.playerCount = playerCount;

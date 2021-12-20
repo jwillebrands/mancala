@@ -14,6 +14,7 @@ public class MutableGameState implements GameState {
 
     private final Map<HouseIdentifier, Integer> seedCount = new HashMap<>();
     private int activePlayer = 0;
+    private Integer winner = null;
 
     public MutableGameState(
             int numPlayers,
@@ -64,7 +65,7 @@ public class MutableGameState implements GameState {
 
     @Override
     public Optional<Integer> winningPlayer() {
-        return Optional.empty();
+        return Optional.ofNullable(winner);
     }
 
     /**
@@ -132,5 +133,10 @@ public class MutableGameState implements GameState {
         if (playerId < 0 || playerId >= numPlayers()) {
             throw new IllegalArgumentException("Invalid player id: " + playerId);
         }
+    }
+
+    void setWinner(int playerId) {
+        checkValidPlayerId(playerId);
+        winner = playerId;
     }
 }
