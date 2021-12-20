@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 public class MutableGameState implements GameState {
@@ -59,6 +60,11 @@ public class MutableGameState implements GameState {
     @Override
     public HouseStream.HouseStreamBuilder houses() {
         return houseStream(numPlayers, numHousesPerPlayer);
+    }
+
+    @Override
+    public Optional<Integer> winningPlayer() {
+        return Optional.empty();
     }
 
     /**

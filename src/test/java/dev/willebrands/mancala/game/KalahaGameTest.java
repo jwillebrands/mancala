@@ -66,6 +66,76 @@ class KalahaGameTest {
                 .forEach(id -> assertEquals(5, game.currentState().getSeedCount(house(id))));
     }
 
+    @Test
+    public void landingOnAnyNonStoreEndsTurn() {
+        ensureLegalMoves(move(0, house("A1")));
+        assertEquals(1, game.currentState().getActivePlayer());
+    }
+
+    @Test
+    public void endingSowOnOwnEmptyHouseCapturesItAndOppositeHouse() {
+        ensureLegalMoves(
+                // Play A5 (4 seeds) Score 1
+                move(0, house("A5")),
+                // Opponent plays B1 (5 seeds)
+                move(1, house("B1")),
+                // Play A1 (4) ending on empty A5, capture A5 (1 seed) + B2 (6 seeds)
+                move(0, house("A1")));
+        assertEquals(
+                0,
+                game.currentState().getSeedCount(house("A5")),
+                "Sowing last seed in empty cup should capture it.");
+        assertEquals(
+                0,
+                game.currentState().getSeedCount(house("B1")),
+                "Sowing last seed in empty cup should capture opposite");
+        assertEquals(
+                7,
+                game.currentState().getScore(0),
+                "Expect 1 point from first turn, 5 from capturing B2 and 1 from capturing A5");
+    }
+
+    @Test
+    public void endingSowingOnOpponentEmptyHouseCapturesNothing() {
+        ensureLegalMoves(
+                // Play A1 (4 seeds)
+                move(0, house("A1")),
+                // Opponent plays B4 (4 seeds); scores 1
+                move(1, house("B4")));
+        assertEquals(
+                1,
+                game.currentState().getSeedCount(house("A1")),
+                "Ending sowing on empty opponent cell should not capture seed.");
+
+        assertEquals(5, game.currentState().getSeedCount(house("B6")));
+    }
+
+    @Test
+    public void whenAllCellsOfAPlayerAreClearedTheGameEnds() {
+        game = new KalahaGame(2, 2);
+        ensureLegalMoves(move(0, house("A1")), move(0, house("A2")));
+        assertTrue(game.currentState().winningPlayer().isPresent());
+    }
+
+    @Test
+    public void testEndGameScoring() {
+        game = new KalahaGame(2, 2);
+        ensureLegalMoves(
+                // Play A1, sow in A2 (3) and Store (1)
+                move(0, house("A1")),
+                // Play A2, sow in Store (2), B1(3), B2(3)
+                move(0, house("A2")));
+        assertEquals(
+                2, game.currentState().getScore(0), "Expected 2 points for player 1 from sowing");
+        assertEquals(
+                6,
+                game.currentState().getScore(1),
+                "Expected 6 points for player 2 from capturing leftover houses after opponent"
+                        + " clearing his.");
+        assertTrue(game.currentState().winningPlayer().isPresent());
+        assertEquals(1, game.currentState().winningPlayer().get());
+    }
+
     private void ensureLegalMoves(Move... moves) {
         for (Move move : moves) {
             MoveValidationResult moveResult =
