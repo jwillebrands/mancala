@@ -12,7 +12,7 @@ interface MoveResult {
 }
 
 export class GameRestService implements GameService {
-    private readonly baseUrl = `${environment.backendUrl}/api`;
+    private readonly baseUrl = `${environment.backendUrl}/api/v1`;
 
     constructor(private httpClient: HttpClient) {}
 
@@ -31,9 +31,10 @@ export class GameRestService implements GameService {
     }
 
     play(gameId: string, house: HouseIdentifier): Observable<GameState> {
+        console.log(house);
         return this.httpClient
             .post<MoveResult>(`${this.baseUrl}/games/${gameId}/moves`, {
-                playerId: house.playerId,
+                playerId: house.player,
                 houseId: house.index,
             })
             .pipe(

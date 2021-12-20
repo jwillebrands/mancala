@@ -26,7 +26,7 @@ export class MancalaBoardComponent {
     }
 
     onHouseClicked(house: HouseIdentifier) {
-        if (this.belongsToActivePlayer(house.playerId)) {
+        if (this.belongsToActivePlayer(house.player)) {
             this.houseClicked.emit(house);
         }
     }

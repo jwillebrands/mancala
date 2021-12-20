@@ -1,4 +1,5 @@
 import { Component, HostBinding, Input } from "@angular/core";
+import { HouseIdentifier } from "../../model/house-identifier";
 
 @Component({
     selector: "app-mancala-house",
@@ -12,4 +13,7 @@ export class MancalaHouseComponent {
 
     @Input()
     seedCount: number = 0;
+
+    @Input()
+    houseId!: HouseIdentifier;
 }

@@ -1,6 +1,9 @@
 package dev.willebrands.mancala.rest;
 
+import lombok.Data;
+
+@Data
 public class MoveDto {
-    int playerId;
-    int houseId;
+    final int playerId;
+    final int houseId;
 }

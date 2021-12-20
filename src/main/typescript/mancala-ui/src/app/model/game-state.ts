@@ -2,15 +2,13 @@ import { HouseIdentifier } from "./house-identifier";
 
 export interface CellState {
     readonly identifier: HouseIdentifier;
-    readonly seeds: number;
+    readonly seedCount: number;
 }
 
 export interface GameState {
     readonly id: string;
-    readonly numPlayers: number;
-    readonly housesPerPlayer: number;
     readonly activePlayer: number;
-    readonly houseLayout: CellState[][];
-    readonly stores: CellState[];
+    readonly board: CellState[][];
+    readonly playerScores: number[];
     readonly winningPlayer?: number;
 }

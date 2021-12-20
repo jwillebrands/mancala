@@ -19,7 +19,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 @RestController
 @RequestMapping(path = "/api/v1/games")
 public class GameRestController {
-    private KalahaGameRepository repository;
+    private final KalahaGameRepository repository;
 
     GameRestController(KalahaGameRepository repository) {
         this.repository = repository;
@@ -38,7 +38,7 @@ public class GameRestController {
     @GetMapping("/{id}")
     public GameDto getGameState(@PathVariable("id") String gameId) {
         KalahaGame game = repository.findById(gameId).orElseThrow(ResourceNotFoundException::new);
-        return GameDto.from(game.currentState());
+        return GameDto.from(gameId, game);
     }
 
     @PostMapping("/{id}/moves")
@@ -46,6 +46,6 @@ public class GameRestController {
         KalahaGame game = repository.findById(gameId).orElseThrow(ResourceNotFoundException::new);
         MoveResult result =
                 game.sow(move.playerId, new HouseIdentifier(move.playerId, move.houseId));
-        return MoveResultDto.from(result, game.currentState());
+        return MoveResultDto.from(result, GameDto.from(gameId, game));
     }
 }

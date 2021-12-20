@@ -1,4 +1,4 @@
 export interface HouseIdentifier {
-    readonly playerId: number;
+    readonly player: number;
     readonly index: number;
 }
