@@ -28,8 +28,8 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.liquibase</groupId>
-			<artifactId>liquibase-core</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 
 		<dependency>
@@ -50,6 +50,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>mancala</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
